@@ -27,7 +27,7 @@ const LandingPage = () => {
       {user != null ? (
         <div>
           <h2>Logged in</h2>
-          <h3>ID: {user.id}</h3>
+          <h3>Username: {user.username}</h3>
           <h3>Email: {user.email}</h3>
           <button onClick={logoutUser}>Logout</button>
         </div>
