@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import httpClient from '../httpClient';
 
-const Header = () => {
-  const [user, setUser] = useState(null);
+const Header = ({ setUser }) => {
+  const [localUser, setLocalUser] = useState(null);
 
   const logoutUser = async () => {
     await httpClient.post("http://localhost:8080/logout");
@@ -13,22 +13,23 @@ const Header = () => {
     (async () => {
       try {
         const response = await httpClient.get("http://localhost:8080/@me");
-        setUser(response.data);
+        setLocalUser(response.data);
+        setUser(response.data); // Set user in the parent component
       } catch (error) {
         console.error("Authentication error");
       }
     })();
-  }, []);
+  }, [setUser]);
 
   return (
     <header className="bg-blue-800 text-white p-6">
       <h1 className="text-2xl font-bold mb-4">Welcome to the E-Learning Platform</h1>
 
-      {user ? (
+      {localUser ? (
         <div className="p-4 bg-blue-700 rounded shadow-lg">
           <h2 className="text-xl font-semibold mb-2">Logged in</h2>
-          <h3 className="text-lg mb-1">Username: {user.username}</h3>
-          <h3 className="text-lg mb-4">Email: {user.email}</h3>
+          <h3 className="text-lg mb-1">Username: {localUser.username}</h3>
+          <h3 className="text-lg mb-4">Email: {localUser.email}</h3>
           <button 
             onClick={logoutUser} 
             className="bg-red-500 px-4 py-2 rounded hover:bg-red-600 transition">
