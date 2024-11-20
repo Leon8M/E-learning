@@ -3,16 +3,23 @@ from config import ApplicationConfig
 from flask_cors import CORS, cross_origin
 from flask_bcrypt import Bcrypt
 from flask_session import Session
+
 from flask_socketio import SocketIO, join_room, leave_room, send
 from datetime import datetime, timedelta
 from functools import wraps
-from models import db, User
+from models import db, User, File
 import random
+import os
 from string import ascii_uppercase
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
 cors = CORS(app, origins='*', supports_credentials=True)
+
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 bcrypt = Bcrypt(app)
 server_session = Session(app)
@@ -157,6 +164,43 @@ def handle_disconnect():
         if rooms[room]["members"] <= 0:
             del rooms[room]
         send({"name": name, "message": "has left the room"}, to=room)
+        
+
+@app.route('/upload-file', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files or 'name' not in request.form:
+        return jsonify({"error": "No file or name provided"}), 400
+    
+    file = request.files['file']
+    name = request.form['name']
+    
+    if not file or not name:
+        return jsonify({"error": "Invalid file or name"}), 400
+
+    filename = secure_filename(file.filename)
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(filepath)
+    
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Unauthorised"}), 401
+    
+    new_file = File(name=name, path=filepath, uploaded_by=user_id)
+    db.session.add(new_file)
+    db.session.commit()
+    
+    return jsonify({"message": "File uploaded successfully", "file": {"name": name, "path": filepath}}), 201
+
+@app.route('/search-files', methods=['GET'])
+def search_files():
+    query = request.args.get('query', '')
+    if not query:
+        return jsonify({"error": "No search query provided"}), 400
+
+    files = File.query.filter(File.name.ilike(f"%{query}%")).all()
+    results = [{"id": file.id, "name": file.name, "path": file.path} for file in files]
+
+    return jsonify({"files": results}), 200
  
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
