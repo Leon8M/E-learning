@@ -15,7 +15,7 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
-cors = CORS(app, origins='*', supports_credentials=True)
+cors = CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -189,7 +189,10 @@ def upload_file():
     db.session.add(new_file)
     db.session.commit()
     
-    return jsonify({"message": "File uploaded successfully", "file": {"name": name, "path": filepath}}), 201
+    response = jsonify({"message": "File uploaded successfully", "file": {"name": name, "path": filepath}})
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+    response.headers.add("Access-Control-Allow-Credentials", "true")
+    return response, 201
 
 @app.route('/search-files', methods=['GET'])
 def search_files():
