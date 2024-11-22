@@ -31,6 +31,7 @@ Navigate to the server directory:
 
 `
 cd server`
+
 Create a virtual environment and activate it:
 
 `
@@ -39,38 +40,46 @@ python -m venv venv`
 `source env/bin/activate `
 
 ` On Windows: env\Scripts\activate`
+
 Install dependencies:
 
 `
 pip install -r requirements.txt`
+
 Start the server:
 
 `
 python app.py`
+
 The server will start at http://localhost:8080.
 # 3. Set Up the Client
 Navigate to the client directory:
 
 `
 cd ../client`
+
 Install dependencies:
 
 `
 npm install`
+
 Start the development server:
 
 `
 npm run dev`
+
 The client will start at http://localhost:5173.
 # 4. Running the Application
 Start the server using:
 
 `
 python app.py`
+
 Start the client using:
 
 `
 npm run dev`
+
 Open your browser and navigate to http://localhost:5173 to use the application.
 
 ## API Endpoints
