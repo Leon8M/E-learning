@@ -3,9 +3,13 @@ This is an e-learning platform designed to enhance peer-to-peer learning among u
 
 ## Features
 User Authentication: Register and log in to access the platform.
+
 File Sharing: Upload and download educational materials.
+
 Chat Functionality: Real-time communication with peers (messages expire after 24 hours).
+
 Interactive Quizzes: Engage in collaborative learning through quizzes.
+
 Responsive Design: Optimized for use on desktop and mobile devices.
 
 ## Project Structure
