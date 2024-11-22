@@ -14,8 +14,8 @@ Responsive Design: Optimized for use on desktop and mobile devices.
 
 ## Project Structure
 The application is divided into two parts:
-### Client: React front-end.
-### Server: Python Flask back-end with SQLite database.
+ Client: React front-end.
+ Server: Python Flask back-end with SQLite database.
 
 ## Prerequisites
 Before you begin, ensure you have the following installed:
