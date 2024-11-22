@@ -1,4 +1,4 @@
-### E-Learning Platform
+# E-Learning Platform
 This is an e-learning platform designed to enhance peer-to-peer learning among university students. The platform supports collaborative file sharing, real-time chat, discussion forums, and interactive quizzes.
 
 ## Features
@@ -10,8 +10,8 @@ Responsive Design: Optimized for use on desktop and mobile devices.
 
 ## Project Structure
 The application is divided into two parts:
-# Client: React front-end.
-# Server: Python Flask back-end with SQLite database.
+### Client: React front-end.
+### Server: Python Flask back-end with SQLite database.
 
 ## Prerequisites
 Before you begin, ensure you have the following installed:
@@ -21,12 +21,12 @@ Python 3.8+ (for the server)
 Git (for version control)
 
 ## Getting Started
-# 1. Clone the Repository
+### 1. Clone the Repository
 `
 git clone https://github.com/your-username/E-learning.git`
 
 `cd E-learning`
-# 2. Set Up the Server
+### 2. Set Up the Server
 Navigate to the server directory:
 
 `
@@ -52,7 +52,7 @@ Start the server:
 python app.py`
 
 The server will start at http://localhost:8080.
-# 3. Set Up the Client
+### 3. Set Up the Client
 Navigate to the client directory:
 
 `
@@ -69,7 +69,7 @@ Start the development server:
 npm run dev`
 
 The client will start at http://localhost:5173.
-# 4. Running the Application
+### 4. Running the Application
 Start the server using:
 
 `
@@ -83,13 +83,13 @@ npm run dev`
 Open your browser and navigate to http://localhost:5173 to use the application.
 
 ## API Endpoints
-# User Routes
+### User Routes
 POST /register: Register a new user.
 POST /login: Log in a user.
-# File Routes
+### File Routes
 POST /upload-file: Upload a file.
 GET /search-files: Get a list of files.
-# Chat Routes
+### Chat Routes
 POST /chat: Send a chat message.
 GET /chat: Retrieve chat messages.
 
