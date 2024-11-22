@@ -22,42 +22,45 @@ Git (for version control)
 
 ## Getting Started
 # 1. Clone the Repository
-`bash
-git clone https://github.com/your-username/E-learning.git
-cd E-learning`
+`
+git clone https://github.com/your-username/E-learning.git`
+
+`cd E-learning`
 # 2. Set Up the Server
 Navigate to the server directory:
-`bash
+`
 cd server`
 Create a virtual environment and activate it:
-`bash
-python -m venv venv
-source env/bin/activate `
+`
+python -m venv venv`
+
+`source env/bin/activate `
+
 ` On Windows: env\Scripts\activate`
 Install dependencies:
-`bash
+`
 pip install -r requirements.txt`
 Start the server:
-`bash
+`
 python app.py`
 The server will start at http://localhost:8080.
 # 3. Set Up the Client
 Navigate to the client directory:
-`bash
+`
 cd ../client`
 Install dependencies:
-`bash
+`
 npm install`
 Start the development server:
-`bash
+`
 npm run dev`
 The client will start at http://localhost:5173.
 # 4. Running the Application
 Start the server using:
-`bash
+`
 python app.py`
 Start the client using:
-`bash
+`
 npm run dev`
 Open your browser and navigate to http://localhost:5173 to use the application.
 
