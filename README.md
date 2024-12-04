@@ -22,8 +22,8 @@ The application is divided into two parts:
 ## Prerequisites
 Before you begin, ensure you have the following installed:
 
-Node.js (for the client)
-Python 3.8+ (for the server)
+Node.js (for the client),
+Python 3.8+ (for the server),
 Git (for version control)
 
 ## Getting Started
