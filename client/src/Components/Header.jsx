@@ -23,7 +23,14 @@ const Header = ({ setUser }) => {
 
   return (
     <header className="bg-blue-800 text-white p-6">
-      <h1 className="text-2xl font-bold mb-4">Welcome to the E-Learning Platform</h1>
+      <div className="flex items-center gap-4">
+        <img
+          src="/logo-clear.png"
+          alt="Platform Logo"
+          className="w-24 h-24 object-contain"
+        />
+        <h1 className="text-2xl font-bold">Learn, Share, Grow Together</h1>
+      </div>
 
       {localUser ? (
         <div className="p-4 bg-blue-700 rounded shadow-lg">
