@@ -15,7 +15,11 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
-cors = CORS(app, resources={r"/*": {"origins": "https://lively-tree-062a6b710.4.azurestaticapps.net/"}}, supports_credentials=True)
+CORS(
+    app,
+    resources={r"/*": {"origins": ["https://lively-tree-062a6b710.4.azurestaticapps.net"]}},
+    supports_credentials=True
+)
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -24,7 +28,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 bcrypt = Bcrypt(app)
 server_session = Session(app)
 db.init_app(app)
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="https://lively-tree-062a6b710.4.azurestaticapps.net", allow_upgrades=True)
 
 # Chat room storage
 rooms = {}
@@ -41,6 +45,7 @@ with app.app_context():
 
 
 @app.route('/@me')
+@cross_origin(origins=["https://lively-tree-062a6b710.4.azurestaticapps.net"], supports_credentials=True)
 def get_current_user():
     user_id = session.get("user_id")
     
@@ -58,6 +63,7 @@ def get_current_user():
 
 
 @app.route("/register", methods=['GET', 'POST'])
+@cross_origin(origins=["https://lively-tree-062a6b710.4.azurestaticapps.net"], supports_credentials=True)
 def register_user ():
     email = request.json["email"]
     username = request.json["username"]
@@ -82,6 +88,7 @@ def register_user ():
 
  
 @app.route("/login", methods=['GET', 'POST'])
+@cross_origin(origins=["https://lively-tree-062a6b710.4.azurestaticapps.net"], supports_credentials=True)
 def login_user():
     email = request.json["email"]
     password = request.json["password"]
@@ -104,12 +111,14 @@ def login_user():
     
 
 @app.route('/logout', methods=['POST'])
+@cross_origin(origins=["https://lively-tree-062a6b710.4.azurestaticapps.net"], supports_credentials=True)
 def logout_user():
     session.pop('user_id')
     return "200"
 
 # Chat Room Routes
 @app.route("/join-room", methods=["POST"])
+@cross_origin(origins=["https://lively-tree-062a6b710.4.azurestaticapps.net"], supports_credentials=True)
 def join_room_route():
     data = request.json
     name = data.get("name")
@@ -125,6 +134,7 @@ def join_room_route():
     return jsonify({"room": code}), 200
 
 @app.route("/create-room", methods=["POST"])
+@cross_origin(origins=["https://lively-tree-062a6b710.4.azurestaticapps.net"], supports_credentials=True)
 def create_room_route():
     data = request.json
     name = data.get("name")
@@ -167,6 +177,7 @@ def handle_disconnect():
         
 
 @app.route('/upload-file', methods=['POST'])
+@cross_origin(origins=["https://lively-tree-062a6b710.4.azurestaticapps.net"], supports_credentials=True)
 def upload_file():
     if 'file' not in request.files or 'name' not in request.form:
         return jsonify({"error": "No file or name provided"}), 400
@@ -195,6 +206,7 @@ def upload_file():
     return response, 201
 
 @app.route('/search-files', methods=['GET'])
+@cross_origin(origins=["https://lively-tree-062a6b710.4.azurestaticapps.net"], supports_credentials=True)
 def search_files():
     query = request.args.get('query', '')
     if not query:
