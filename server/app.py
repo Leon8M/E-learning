@@ -33,7 +33,9 @@ socketio = SocketIO(
     cors_allowed_origins="https://lively-tree-062a6b710.4.azurestaticapps.net",
     allow_upgrades=False,  # Disable WebSocket upgrade
     logger=True,
-    engineio_logger=True
+    async_mode="eventlet",
+    engineio_logger=True,
+    transports=["websocket", "polling"]
 )
 
 # Chat room storage
