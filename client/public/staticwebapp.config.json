@@ -8,7 +8,15 @@
     ],
     "navigationFallback": {
       "rewrite": "/index.html",
-      "exclude": ["/static/*", "*.js", "*.css", "*.png", "*.jpg", "*.svg", "*.json"]
+      "exclude": [
+        "/static/*",  
+        "/*.js",      
+        "/*.css",
+        "/*.png",
+        "/*.jpg",
+        "/*.svg",
+        "/*.json"
+      ]
     }
   }
   
