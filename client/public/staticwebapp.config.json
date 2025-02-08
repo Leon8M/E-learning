@@ -1,7 +1,7 @@
 {
     "routes": [
       {
-        "route": "/{*rest}",
+        "route": "/*",
         "serve": "/index.html",
         "statusCode": 200
       }
@@ -9,8 +9,8 @@
     "navigationFallback": {
       "rewrite": "/index.html",
       "exclude": [
-        "/static/*",  
-        "/*.js",      
+        "/static/*",
+        "/*.js",
         "/*.css",
         "/*.png",
         "/*.jpg",
@@ -19,4 +19,3 @@
       ]
     }
   }
-  
