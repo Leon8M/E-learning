@@ -15,7 +15,7 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
-cors = CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
+cors = CORS(app, resources={r"/*": {"origins": "https://lively-tree-062a6b710.4.azurestaticapps.net/"}}, supports_credentials=True)
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
