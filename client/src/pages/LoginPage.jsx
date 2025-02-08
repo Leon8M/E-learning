@@ -7,7 +7,7 @@ const LoginPage = () => {
 
     const logInUser = async () => {
         try {
-            const response = await httpClient.post('//localhost:8080/login', {
+            const response = await httpClient.post('https://e-learning-nvak.onrender.com/login', {
                 email,
                 password
             });

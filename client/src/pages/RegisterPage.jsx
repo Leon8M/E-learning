@@ -8,7 +8,7 @@ const RegisterPage = () => {
 
     const registerUser = async () => {
         try {
-            const response = await httpClient.post('//localhost:8080/register', {
+            const response = await httpClient.post('https://e-learning-nvak.onrender.com/register', {
                 email,
                 username,
                 password

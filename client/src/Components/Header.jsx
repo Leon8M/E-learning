@@ -5,14 +5,14 @@ const Header = ({ setUser }) => {
   const [localUser, setLocalUser] = useState(null);
 
   const logoutUser = async () => {
-    await httpClient.post("http://localhost:8080/logout");
+    await httpClient.post("https://e-learning-nvak.onrender.com/logout");
     window.location.href = "/";
   };
 
   useEffect(() => {
     (async () => {
       try {
-        const response = await httpClient.get("http://localhost:8080/@me");
+        const response = await httpClient.get("https://e-learning-nvak.onrender.com/@me");
         setLocalUser(response.data);
         setUser(response.data); // Set user in the parent component
       } catch (error) {
