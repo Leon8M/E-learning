@@ -31,10 +31,9 @@ db.init_app(app)
 socketio = SocketIO(
     app,
     cors_allowed_origins="https://lively-tree-062a6b710.4.azurestaticapps.net",
-    allow_upgrades=True,
+    allow_upgrades=False,  # Disable WebSocket upgrade
     logger=True,
-    engineio_logger=True,
-    transports=["websocket", "polling"]
+    engineio_logger=True
 )
 
 # Chat room storage

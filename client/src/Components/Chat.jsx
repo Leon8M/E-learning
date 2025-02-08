@@ -3,8 +3,12 @@ import io from 'socket.io-client';
 import httpClient from '../httpClient';
 
 // Establish connection to WebSocket server
-const socket = io("https://e-learning-nvak.onrender.com", {
-  withCredentials: true,
+const socket = io('https://e-learning-nvak.onrender.com', {
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000,
+    debug: true,
+    transports: ["websocket", "polling"]
 });
 
 const Chat = ({ user }) => {
