@@ -12,7 +12,9 @@ const Header = ({ setUser }) => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await httpClient.get("https://e-learning-nvak.onrender.com/@me");
+        const response = await httpClient.get("https://e-learning-nvak.onrender.com/@me", {
+          withCredentials: true,
+      });
         setLocalUser(response.data);
         setUser(response.data); // Set user in the parent component
       } catch (error) {
