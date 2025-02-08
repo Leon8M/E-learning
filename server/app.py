@@ -28,7 +28,13 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 bcrypt = Bcrypt(app)
 server_session = Session(app)
 db.init_app(app)
-socketio = SocketIO(app, cors_allowed_origins="https://lively-tree-062a6b710.4.azurestaticapps.net", allow_upgrades=True)
+socketio = SocketIO(
+    app,
+    cors_allowed_origins="https://lively-tree-062a6b710.4.azurestaticapps.net",
+    allow_upgrades=True,
+    logger=True,
+    engineio_logger=True
+)
 
 # Chat room storage
 rooms = {}
@@ -218,5 +224,5 @@ def search_files():
     return jsonify({"files": results}), 200
  
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    socketio.run(app, debug=True, port=8080)
     
