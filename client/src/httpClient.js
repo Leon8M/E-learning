@@ -1,23 +1,9 @@
-import axios from "axios";
+// httpClient.js
+import axios from 'axios';
 
 const httpClient = axios.create({
-    baseURL: "https://e-learning-nvak.onrender.com",  // Ensure this is correct
-    withCredentials: true,
-    headers: {
-        "Content-Type": "application/json",
-    }
+  baseURL: 'https://e-learning-nvak.onrender.com',
+  withCredentials: true, // Include cookies in all requests
 });
-
-// Request Interceptor (Attach token automatically)
-httpClient.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem("token"); // Ensure token is stored
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
 
 export default httpClient;

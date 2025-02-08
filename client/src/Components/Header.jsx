@@ -14,6 +14,7 @@ const Header = ({ setUser }) => {
       try {
         const response = await httpClient.get("https://e-learning-nvak.onrender.com/@me", {
           withCredentials: true,
+          headers: { "Content-Type": "application/json" },
       });
         setLocalUser(response.data);
         setUser(response.data); // Set user in the parent component

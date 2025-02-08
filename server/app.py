@@ -55,6 +55,7 @@ with app.app_context():
 @app.route('/@me')
 @cross_origin(origins=["https://lively-tree-062a6b710.4.azurestaticapps.net"], supports_credentials=True)
 def get_current_user():
+    print("Session Data:", session)
     user_id = session.get("user_id")
     
     if not user_id:
