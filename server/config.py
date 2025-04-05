@@ -12,7 +12,7 @@ class ApplicationConfig:
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
-    SQLALCHEMY_DATABASE_URI = r"sqlite:///./db.sqlite"
+    SQLALCHEMY_DATABASE_URI = r"postgresql://e-learning_owner:npg_mkyjGB07DOVE@ep-yellow-boat-a8f4h2zp-pooler.eastus2.azure.neon.tech/e-learning?sslmode=require"
     
     SESSION_TYPE = "redis"
     SESSION_PERMANENT = False
