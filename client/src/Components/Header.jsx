@@ -5,14 +5,14 @@ const Header = ({ setUser }) => {
   const [localUser, setLocalUser] = useState(null);
 
   const logoutUser = async () => {
-    await httpClient.post("https://e-learning-nvak.onrender.com/logout");
+    await httpClient.post("http://127.0.0.1:8080/logout");
     window.location.href = "/";
   };
 
   useEffect(() => {
     (async () => {
       try {
-        const response = await httpClient.get("https://e-learning-nvak.onrender.com/@me", {
+        const response = await httpClient.get("http://127.0.0.1:8080/@me", {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
       });

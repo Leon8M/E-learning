@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import httpClient from '../httpClient';
 
 // Establish connection to WebSocket server
-const socket = io('https://e-learning-nvak.onrender.com', {
+const socket = io('http://127.0.0.1:8080', {
     reconnection: true,
     reconnectionAttempts: 5,
     reconnectionDelay: 1000,
@@ -39,7 +39,7 @@ const Chat = ({ user }) => {
       return;
     }
     try {
-      const response = await httpClient.post("https://e-learning-nvak.onrender.com/create-room", { name });
+      const response = await httpClient.post("http://127.0.0.1:8080/create-room", { name });
       setRoom(response.data.room);
       setIsInRoom(true);
       setError('');
@@ -55,7 +55,7 @@ const Chat = ({ user }) => {
       return;
     }
     try {
-      await httpClient.post("https://e-learning-nvak.onrender.com/join-room", { name, code: room });
+      await httpClient.post("http://127.0.0.1:8080/join-room", { name, code: room });
       setIsInRoom(true);
       setError('');
     } catch (err) {

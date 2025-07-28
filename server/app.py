@@ -17,7 +17,7 @@ app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
 CORS(
     app,
-    resources={r"/*": {"origins": ["https://eeba3d15.e-learning-74b.pages.dev"]}},
+    resources={r"/*": {"origins": ["http://localhost:5173"]}},
     supports_credentials=True
 )
 
@@ -30,7 +30,7 @@ server_session = Session(app)
 db.init_app(app)
 socketio = SocketIO(
     app,
-    cors_allowed_origins="https://eeba3d15.e-learning-74b.pages.dev",
+    cors_allowed_origins="http://localhost:5173",
     allow_upgrades=False,  # Disable WebSocket upgrade
     logger=True,
     async_mode="eventlet",
@@ -53,7 +53,7 @@ with app.app_context():
 
 
 @app.route('/@me')
-@cross_origin(origins=["https://eeba3d15.e-learning-74b.pages.dev"], supports_credentials=True)
+@cross_origin(origins=["http://localhost:5173"], supports_credentials=True)
 def get_current_user():
     print("Session Data:", session)
     user_id = session.get("user_id")
@@ -72,7 +72,7 @@ def get_current_user():
 
 
 @app.route("/register", methods=['GET', 'POST'])
-@cross_origin(origins=["https://eeba3d15.e-learning-74b.pages.dev"], supports_credentials=True)
+@cross_origin(origins=["http://localhost:5173"], supports_credentials=True)
 def register_user ():
     email = request.json["email"]
     username = request.json["username"]
@@ -97,7 +97,7 @@ def register_user ():
 
  
 @app.route("/login", methods=['GET', 'POST'])
-@cross_origin(origins=["https://eeba3d15.e-learning-74b.pages.dev"], supports_credentials=True)
+@cross_origin(origins=["http://localhost:5173"], supports_credentials=True)
 def login_user():
     email = request.json["email"]
     password = request.json["password"]
@@ -121,14 +121,14 @@ def login_user():
     
 
 @app.route('/logout', methods=['POST'])
-@cross_origin(origins=["https://eeba3d15.e-learning-74b.pages.dev"], supports_credentials=True)
+@cross_origin(origins=["http://localhost:5173"], supports_credentials=True)
 def logout_user():
     session.pop('user_id')
     return "200"
 
 # Chat Room Routes
 @app.route("/join-room", methods=["POST"])
-@cross_origin(origins=["https://eeba3d15.e-learning-74b.pages.dev"], supports_credentials=True)
+@cross_origin(origins=["http://localhost:5173"], supports_credentials=True)
 def join_room_route():
     data = request.json
     name = data.get("name")
@@ -144,7 +144,7 @@ def join_room_route():
     return jsonify({"room": code}), 200
 
 @app.route("/create-room", methods=["POST"])
-@cross_origin(origins=["https://eeba3d15.e-learning-74b.pages.dev"], supports_credentials=True)
+@cross_origin(origins=["http://localhost:5173"], supports_credentials=True)
 def create_room_route():
     data = request.json
     name = data.get("name")
@@ -187,7 +187,7 @@ def handle_disconnect():
         
 
 @app.route('/upload-file', methods=['POST'])
-@cross_origin(origins=["https://eeba3d15.e-learning-74b.pages.dev"], supports_credentials=True)
+@cross_origin(origins=["http://localhost:5173"], supports_credentials=True)
 def upload_file():
     if 'file' not in request.files or 'name' not in request.form:
         return jsonify({"error": "No file or name provided"}), 400
@@ -211,12 +211,12 @@ def upload_file():
     db.session.commit()
     
     response = jsonify({"message": "File uploaded successfully", "file": {"name": name, "path": filepath}})
-    response.headers.add("Access-Control-Allow-Origin", "https://eeba3d15.e-learning-74b.pages.dev")
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
     response.headers.add("Access-Control-Allow-Credentials", "true")
     return response, 201
 
 @app.route('/search-files', methods=['GET'])
-@cross_origin(origins=["https://eeba3d15.e-learning-74b.pages.dev"], supports_credentials=True)
+@cross_origin(origins=["http://localhost:5173"], supports_credentials=True)
 def search_files():
     query = request.args.get('query', '')
     if not query:

@@ -26,7 +26,7 @@ const File = ({ user }) => {
     formData.append('name', name);
 
     try {
-      const response = await httpClient.post('https://e-learning-nvak.onrender.com/upload-file', formData, {
+      const response = await httpClient.post('http://127.0.0.1:8080/upload-file', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       alert(response.data.message);
@@ -39,7 +39,7 @@ const File = ({ user }) => {
 
   const handleSearch = async () => {
     try {
-      const response = await httpClient.get(`https://e-learning-nvak.onrender.com/search-files?query=${searchQuery}`);
+      const response = await httpClient.get(`http://127.0.0.1:8080/search-files?query=${searchQuery}`);
       setSearchResults(response.data.files);
     } catch (err) {
       alert(err.response?.data?.error || 'Search failed.');

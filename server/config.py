@@ -21,5 +21,5 @@ class ApplicationConfig:
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SECURE = True  
     SESSION_COOKIE_SAMESITE = "None"
-    SESSION_REDIS = redis.from_url("redis://red-cujogvrv2p9s7384kmig:6379")
+    SESSION_REDIS = redis.from_url(os.getenv("REDIS_URL"))
     PERMANENT_SESSION_LIFETIME = timedelta(days=7)
