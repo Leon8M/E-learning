@@ -4,18 +4,28 @@ import httpClient from '../httpClient';
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
     const logInUser = async () => {
+        setError(""); // Clear previous errors
         try {
-            const response = await httpClient.post('http://127.0.0.1:8080/login', {
+            const response = await httpClient.post('/auth/login', {
                 email,
                 password
             });
 
+            localStorage.setItem('access_token', response.data.access_token);
+            // If refresh tokens are implemented, store them here as well:
+            // localStorage.setItem('refresh_token', response.data.refresh_token);
+
             window.location.href = "/";
-        } catch (error) {
-            if (error.response && error.response.status === 401) {
-                alert("Invalid email or password");
+        } catch (err) {
+            if (err.response && err.response.status === 401) {
+                setError("Invalid email or password");
+            } else if (err.response && err.response.data && err.response.data.message) {
+                setError(err.response.data.message);
+            } else {
+                setError("An unexpected error occurred.");
             }
         }
     };
@@ -26,7 +36,8 @@ const LoginPage = () => {
                 <h1 className="text-2xl font-bold text-gray-700 mb-6 text-center">
                     Login to Your Account
                 </h1>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); logInUser(); }}>
+                    {error && <p className="text-red-500 text-center text-sm">{error}</p>}
                     <div>
                         <label className="block text-sm font-medium text-gray-600 mb-1">Email</label>
                         <input
@@ -48,8 +59,7 @@ const LoginPage = () => {
                         />
                     </div>
                     <button
-                        type="button"
-                        onClick={logInUser}
+                        type="submit"
                         className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 focus:outline-none"
                     >
                         Login

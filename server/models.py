@@ -20,4 +20,6 @@ class File(db.Model):
     id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
     name = db.Column(db.String(100), nullable=False)
     path = db.Column(db.String(200), nullable=False)  # File storage path
+    summary = db.Column(db.Text, nullable=True)
+    questions = db.Column(db.Text, nullable=True)
     uploaded_by = db.Column(db.String(32), db.ForeignKey('users.id'), nullable=False)

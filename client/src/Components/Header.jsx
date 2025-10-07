@@ -1,28 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useContext } from 'react';
+import { AuthContext } from '../Router';
 import httpClient from '../httpClient';
+import { useNavigate } from 'react-router-dom';
 
-const Header = ({ setUser }) => {
-  const [localUser, setLocalUser] = useState(null);
+const Header = () => {
+  const { user, setUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const logoutUser = async () => {
-    await httpClient.post("http://127.0.0.1:8080/logout");
-    window.location.href = "/";
+    try {
+      await httpClient.post("/auth/logout");
+      localStorage.removeItem('access_token');
+      // localStorage.removeItem('refresh_token'); // If using refresh tokens
+      setUser(null);
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Optionally, handle error display to the user
+    }
   };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await httpClient.get("http://127.0.0.1:8080/@me", {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
-      });
-        setLocalUser(response.data);
-        setUser(response.data); // Set user in the parent component
-      } catch (error) {
-        console.error("Authentication error");
-      }
-    })();
-  }, [setUser]);
 
   return (
     <header className="bg-blue-800 text-white p-6">
@@ -35,11 +31,11 @@ const Header = ({ setUser }) => {
         <h1 className="text-2xl font-bold">Learn, Share, Grow Together</h1>
       </div>
 
-      {localUser ? (
+      {user ? (
         <div className="p-4 bg-blue-700 rounded shadow-lg">
           <h2 className="text-xl font-semibold mb-2">Logged in</h2>
-          <h3 className="text-lg mb-1">Username: {localUser.username}</h3>
-          <h3 className="text-lg mb-4">Email: {localUser.email}</h3>
+          <h3 className="text-lg mb-1">Username: {user.username}</h3>
+          <h3 className="text-lg mb-4">Email: {user.email}</h3>
           <button 
             onClick={logoutUser} 
             className="bg-red-500 px-4 py-2 rounded hover:bg-red-600 transition">

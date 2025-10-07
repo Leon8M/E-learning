@@ -3,16 +3,19 @@ import io from 'socket.io-client';
 import httpClient from '../httpClient';
 
 // Establish connection to WebSocket server
-const socket = io('http://127.0.0.1:8080', {
+// The JWT token needs to be sent with the Socket.IO connection for authentication
+const socket = io('http://localhost:8080', {
     reconnection: true,
     reconnectionAttempts: 5,
     reconnectionDelay: 1000,
     debug: true,
-    transports: ["websocket", "polling"]
+    transports: ["websocket", "polling"],
+    auth: {
+        token: localStorage.getItem('access_token') // Send JWT with connection
+    }
 });
 
 const Chat = ({ user }) => {
-  const [name, setName] = useState(user?.username || ''); // Initialize with user's username
   const [room, setRoom] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -34,12 +37,8 @@ const Chat = ({ user }) => {
   }
 
   const createRoom = async () => {
-    if (!name) {
-      setError("Please enter your name");
-      return;
-    }
     try {
-      const response = await httpClient.post("http://127.0.0.1:8080/create-room", { name });
+      const response = await httpClient.post("/chat/create-room", {}); // Name is taken from JWT on server
       setRoom(response.data.room);
       setIsInRoom(true);
       setError('');
@@ -50,12 +49,12 @@ const Chat = ({ user }) => {
   };
 
   const joinRoom = async () => {
-    if (!name || !room) {
-      setError("Please enter both name and room code");
+    if (!room) {
+      setError("Please enter a room code");
       return;
     }
     try {
-      await httpClient.post("http://127.0.0.1:8080/join-room", { name, code: room });
+      await httpClient.post("/chat/join-room", { code: room }); // Name is taken from JWT on server
       setIsInRoom(true);
       setError('');
     } catch (err) {
@@ -66,10 +65,10 @@ const Chat = ({ user }) => {
 
   const sendMessage = () => {
     if (message.trim()) {
-    const newMessage = { name, message };
+    const newMessage = { name: user.username, message };
 
     // Emit the message to the server
-    socket.emit("message", newMessage);
+    socket.emit("message", { data: message }); // Send only message content, name is from server
 
     // Update the local state immediately
     setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -84,13 +83,7 @@ const Chat = ({ user }) => {
       {!isInRoom ? (
         <div className="w-full max-w-md p-6 bg-white shadow-lg rounded-lg">
           <h3 className="text-xl font-semibold text-center text-blue-600">Enter The Chat Room</h3>
-          <input
-            type="text"
-            placeholder="Pick a name"
-            className="w-full p-2 mt-4 border rounded-md focus:outline-none focus:border-blue-500"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          {/* Removed name input as it's taken from authenticated user */}
           <div className="mt-4">
             <input
               type="text"

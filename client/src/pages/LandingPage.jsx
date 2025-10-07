@@ -1,21 +1,28 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Chat from '../Components/Chat';
 import Header from '../Components/Header';
 import Quiz from '../Components/Quiz';
 import File from '../Components/File';
+import { AuthContext } from '../Router';
 
 const LandingPage = () => {
-  const [user, setUser] = useState(null);
+  const { user } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('Chat'); // Default tab
+  const [selectedFileId, setSelectedFileId] = useState(null); // New state for selected file
+
+  const handleFileSelect = (fileId) => {
+    setSelectedFileId(fileId);
+    setActiveTab('Quiz'); // Automatically switch to Quiz tab when a file is selected
+  };
 
   const renderComponent = () => {
     switch (activeTab) {
       case 'Chat':
         return <Chat user={user} />;
       case 'Quiz':
-        return <Quiz user={user} />;
+        return <Quiz user={user} fileId={selectedFileId} />;
       case 'File':
-        return <File user={user} />;
+        return <File user={user} onFileSelect={handleFileSelect} />;
       default:
         return null;
     }
@@ -23,7 +30,7 @@ const LandingPage = () => {
 
   return (
     <div>
-      <Header setUser={setUser} />
+      <Header /> {/* Header now consumes AuthContext directly */}
       <div className="tab-container p-4 bg-gray-100 shadow-md">
         <button
           className={`px-4 py-2 rounded ${

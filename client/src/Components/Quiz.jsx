@@ -1,14 +1,52 @@
 import { useState, useEffect } from 'react';
-import questions from './questions';
+import httpClient from '../httpClient';
 
-const Quiz = ({ user }) => {
-  const [selectedTopic, setSelectedTopic] = useState('Programming');
+const Quiz = ({ user, fileId }) => {
+  const [quizQuestions, setQuizQuestions] = useState([]);
   const [userAnswers, setUserAnswers] = useState({});
   const [score, setScore] = useState(null);
   const [feedback, setFeedback] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      if (!fileId) {
+        setError("No file selected for quiz.");
+        setLoading(false);
+        return;
+      }
+      try {
+        setLoading(true);
+        setError('');
+        const response = await httpClient.get(`/quiz/get-questions/${fileId}`);
+        // Assuming the backend returns questions in a suitable format
+        setQuizQuestions(response.data.questions);
+      } catch (err) {
+        setError(err.response?.data?.error || 'Failed to fetch quiz questions.');
+        console.error("Error fetching quiz questions:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, [fileId]);
 
   if (!user) {
     return <p className="p-4 text-center text-red-500">You must be logged in to access the quiz.</p>;
+  }
+
+  if (loading) {
+    return <p className="p-4 text-center">Loading quiz questions...</p>;
+  }
+
+  if (error) {
+    return <p className="p-4 text-center text-red-500">Error: {error}</p>;
+  }
+
+  if (quizQuestions.length === 0) {
+    return <p className="p-4 text-center">No quiz questions available for this file.</p>;
   }
 
   const handleAnswerChange = (questionIndex, answer) => {
@@ -24,7 +62,7 @@ const Quiz = ({ user }) => {
     let calculatedScore = 0;
     let feedbackList = [];
 
-    questions[selectedTopic].forEach((question, index) => {
+    quizQuestions.forEach((question, index) => {
       const correctAnswer = question.correctAnswer;
       const userAnswer = userAnswers[index];
 
@@ -45,19 +83,10 @@ const Quiz = ({ user }) => {
 
   return (
     <div className="quiz-container p-4 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold mb-4">Quiz on {selectedTopic}</h2>
-      <select
-        className="mb-4 p-2 rounded border border-gray-300"
-        value={selectedTopic}
-        onChange={(e) => setSelectedTopic(e.target.value)}
-      >
-        {Object.keys(questions).map((topic) => (
-          <option key={topic} value={topic}>{topic}</option>
-        ))}
-      </select>
-
+      <h2 className="text-2xl font-bold mb-4">Quiz</h2>
+      
       <form onSubmit={handleSubmit}>
-        {questions[selectedTopic].map((question, index) => (
+        {quizQuestions.map((question, index) => (
           <div key={index} className="mb-4">
             <p className="font-semibold">{index + 1}. {question.question}</p>
             <div className="flex flex-col">
@@ -88,7 +117,7 @@ const Quiz = ({ user }) => {
 
       {score !== null && (
         <div className="mt-6">
-          <h3 className="text-xl font-bold">Your Score: {score}/{questions[selectedTopic].length}</h3>
+          <h3 className="text-xl font-bold">Your Score: {score}/{quizQuestions.length}</h3>
           {feedback.length > 0 ? (
             <div className="mt-4">
               <h4 className="font-semibold">Incorrect Answers:</h4>

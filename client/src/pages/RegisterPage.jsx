@@ -5,19 +5,29 @@ const RegisterPage = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
     const registerUser = async () => {
+        setError(""); // Clear previous errors
         try {
-            const response = await httpClient.post('http://127.0.0.1:8080/register', {
+            const response = await httpClient.post('/auth/register', {
                 email,
                 username,
                 password
             });
 
+            localStorage.setItem('access_token', response.data.access_token);
+            // If refresh tokens are implemented, store them here as well:
+            // localStorage.setItem('refresh_token', response.data.refresh_token);
+
             window.location.href = "/";
-        } catch (error) {
-            if (error.response && error.response.status === 401) {
-                alert("Invalid email or password");
+        } catch (err) {
+            if (err.response && err.response.status === 409) {
+                setError("User with this email already exists.");
+            } else if (err.response && err.response.data && err.response.data.message) {
+                setError(err.response.data.message);
+            } else {
+                setError("An unexpected error occurred.");
             }
         }
     };
@@ -28,7 +38,8 @@ const RegisterPage = () => {
                 <h1 className="text-2xl font-bold text-gray-700 mb-6 text-center">
                     Create an Account
                 </h1>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); registerUser(); }}>
+                    {error && <p className="text-red-500 text-center text-sm">{error}</p>}
                     <div>
                         <label className="block text-sm font-medium text-gray-600 mb-1">
                             Username
@@ -66,8 +77,7 @@ const RegisterPage = () => {
                         />
                     </div>
                     <button
-                        type="button"
-                        onClick={registerUser}
+                        type="submit"
                         className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 focus:outline-none"
                     >
                         Register
