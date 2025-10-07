@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, make_response, render_template
 from config import ApplicationConfig
 from flask_cors import CORS, cross_origin
-from flask_bcrypt import Bcrypt
+
 from flask_session import Session
 
 from flask_socketio import SocketIO, join_room, leave_room, send
@@ -47,16 +47,11 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 server_session = Session(app)
 db.init_app(app)
-bcrypt.init_app(app)
+
 
 socketio = SocketIO(
     app,
-    cors_allowed_origins="http://localhost:5173",
-    allow_upgrades=False,  # Disable WebSocket upgrade
-    logger=True,
-    async_mode="eventlet",
-    engineio_logger=True,
-    transports=["websocket", "polling"]
+    cors_allowed_origins="http://localhost:5173"
 )
 
 with app.app_context():
